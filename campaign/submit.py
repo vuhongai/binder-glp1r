@@ -716,7 +716,7 @@ def write_outputs(out, picked, pooled, log, args):
             # The CSV accepts only protein / nanobody / scfv / fab_kappa /
             # fab_lambda. "Single chain protein" names the design format in the
             # rules, not a column value: a de novo mini-binder is "protein".
-            w.writerow([r["name"], r["sequence"], "protein"])
+            w.writerow([r["name"], r["sequence"], "single_chain"])
 
     with open(out / "submission_annotated.csv", "w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=ANNOT_COLS, extrasaction="ignore")
