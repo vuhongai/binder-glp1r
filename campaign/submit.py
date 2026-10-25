@@ -168,17 +168,24 @@ def load_round1_fallback(root, log):
 # --------------------------------------------------------------------------
 
 def find_cif(root, design, parent):
-    """Locate one AF3 model for a design. Deterministic when several exist."""
-    pats = []
+    """Locate one AF3 model for a design. Deterministic when several exist.
+
+    Design tags are NOT unique across round-2 champions: each champion numbers
+    its own partial-diffusion backbones g0r0_0..7 / g1r0_0..7, so the same tag
+    names a different molecule under a different champion (81 of 115 tags
+    collide in the current campaign). The search is therefore confined to the
+    champion's own directory; a global fallback would silently return a
+    sibling champion's structure.
+    """
     if parent:
         cd = root / CAMPAIGN / "round2" / parent
-        pats += [
+        pats = [(cd, p) for p in (
             f"final/pdb_AF3/*{design}*.cif",
             f"af3/**/{design}__*/**/*_model.cif",
             f"**/{design}__*/**/*_model.cif",
-        ]
-        pats = [(cd, p) for p in pats]
-    pats += [(root / CAMPAIGN, f"**/{design}__*/**/*_model.cif")]
+        )]
+    else:
+        pats = [(root / CAMPAIGN, f"**/{design}__*/**/*_model.cif")]
 
     for base, pat in pats:
         if not base.exists():
@@ -279,17 +286,25 @@ def audit_structure(cif, cutoff):
 
 
 def run_audit(root, rows, cutoff, cache_path, log):
-    """Audit every row, reusing a cache so re-runs are cheap."""
+    """Audit every row, reusing a cache so re-runs are cheap.
+
+    Keyed by (parent, design): a bare design tag is ambiguous across champions
+    (see find_cif), so caching on it alone hands one champion's structure to
+    another champion's design.
+    """
     cache = {}
     if cache_path.exists():
         with open(cache_path, newline="") as fh:
             for r in csv.DictReader(fh):
-                if r.get("cutoff") == f"{cutoff}":
-                    cache[r["design"]] = r
+                # rows without a parent come from the pre-fix cache format and
+                # cannot be trusted to belong to the design they name
+                if r.get("cutoff") == f"{cutoff}" and r.get("parent"):
+                    cache[(r["parent"], r["design"])] = r
 
     audited = missing = 0
     for row in rows:
-        hit = cache.get(row["design"])
+        key = (row["parent"], row["design"])
+        hit = cache.get(key)
         if hit and hit.get("n_epitope"):
             row.update({
                 "n_epitope": int(float(hit["n_epitope"])),
@@ -306,7 +321,8 @@ def run_audit(root, rows, cutoff, cache_path, log):
         res = audit_structure(cif, cutoff) if cif else None
         if res:
             row.update(res)
-            cache[row["design"]] = dict(res, design=row["design"], cutoff=cutoff)
+            cache[key] = dict(res, design=row["design"],
+                              parent=row["parent"], cutoff=cutoff)
             audited += 1
         else:
             row.update({"n_epitope": None, "ecl2_contacts": None,
@@ -315,8 +331,8 @@ def run_audit(root, rows, cutoff, cache_path, log):
             missing += 1
 
     cache_path.parent.mkdir(parents=True, exist_ok=True)
-    cols = ["design", "cutoff", "n_epitope", "ecl2_contacts", "ecl3_contacts",
-            "min_hot_dist", "hot_dists", "cif"]
+    cols = ["parent", "design", "cutoff", "n_epitope", "ecl2_contacts",
+            "ecl3_contacts", "min_hot_dist", "hot_dists", "cif"]
     with open(cache_path, "w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=cols, extrasaction="ignore")
         w.writeheader()
@@ -576,6 +592,14 @@ def main(argv=None):
         return 1
 
     log.append(f"pooled: {len(rows)} unique sequences")
+    tags = defaultdict(set)
+    for r in rows:
+        tags[r["design"]].add(r["parent"])
+    collide = sum(1 for p in tags.values() if len(p) > 1)
+    if collide:
+        log.append(f"note: {collide} of {len(tags)} design tags occur under more "
+                   f"than one champion (each champion renumbers its own "
+                   f"backbones); audits are keyed per champion, not per tag")
     run_audit(root, rows, args.cutoff, out / "structure_audit.csv", log)
 
     log.append("hard filters:")
