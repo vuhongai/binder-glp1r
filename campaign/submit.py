@@ -564,7 +564,7 @@ def write_outputs(out, picked, pooled, log, args):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--n", type=int, default=40,
+    ap.add_argument("--n", type=int, default=20,
                     help="designs to submit (Track 1 allows 40, Tracks 2/3 allow 20)")
     ap.add_argument("--out", default="outputs/submission")
     ap.add_argument("--root", default=None, help="repo root (default: parent of this file)")
@@ -572,10 +572,10 @@ def main(argv=None):
     ap.add_argument("--min-ecl3", type=int, default=1,
                     help="minimum ECL3/TM7 hotspot contacts (agonism requirement)")
     ap.add_argument("--no-require-ecl3", dest="require_ecl3", action="store_false")
-    ap.add_argument("--min-hot-coverage", type=int, default=0,
+    ap.add_argument("--min-hot-coverage", type=int, default=6,
                     help="require this many of the 6 hotspots in contact "
                          "(6 = full ECL2 + ECL3/TM7 engagement); 0 disables")
-    ap.add_argument("--max-rmsd-conv", type=float, default=None,
+    ap.add_argument("--max-rmsd-conv", type=float, default=4,
                     help="reject designs whose binder moves more than this (A) "
                          "between the AF2 and AF3 models after target "
                          "superposition; unset disables")
