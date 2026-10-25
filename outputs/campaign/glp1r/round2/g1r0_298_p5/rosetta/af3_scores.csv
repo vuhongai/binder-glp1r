@@ -1,0 +1,13 @@
+design,species,af3_target_chain,neighbour_chains,ddG,sc,dSASA_int,interface_hbonds,packstat,nres_int,ddG_all,sc_all,dSASA_all,hbonds_all,nres_int_all,nbr_min_dist_pre,nbr_clashes_pre,nbr_clashes_bb_pre,nbr_min_dist_post,nbr_clashes_post,nbr_clashes_bb_post,nbr_contacts_post,total_score,binder_score,interface_dG_SASA_ratio,interface_binder_fraction,interface_hydrophobicity,interface_hbond_percentage,interface_delta_unsat_hbonds,interface_delta_unsat_hbonds_percentage,time,error,assembly_error
+stage1_len60_g0r0_2_p3_dldesign_0_cycle1_af2pred,human,A,,-101.98,0.61,3945.45,11,0.6,36,,,,,,,,,,,,,-164.12,-164.12,-2.58,151.3,50.0,30.56,3.0,8.33,146.8,,
+stage1_len60_g0r0_2_p7_dldesign_0_cycle1_af2pred,human,A,,-94.59,0.59,3548.74,10,0.59,31,,,,,,,,,,,,,-160.43,-160.43,-2.67,127.01,48.39,32.26,3.0,9.68,144.4,,
+stage1_len60_g0r0_5_p5_dldesign_0_cycle1_af2pred,human,A,,-113.47,0.61,4330.98,15,0.56,41,,,,,,,,,,,,,-156.88,-156.88,-2.62,174.94,60.98,36.59,6.0,14.63,147.5,,
+stage1_len60_g1r0_0_p6_dldesign_0_cycle1_af2pred,human,A,,-109.4,0.56,4286.84,10,0.54,39,,,,,,,,,,,,,-155.74,-155.74,-2.55,165.33,48.72,25.64,2.0,5.13,143.0,,
+stage1_len60_g1r0_1_p6_dldesign_0_cycle1_af2pred,human,A,,-82.66,0.65,3049.98,11,0.6,26,,,,,,,,,,,,,-160.22,-160.22,-2.71,99.17,57.69,42.31,1.0,3.85,141.4,,
+stage1_len60_g1r0_2_p3_dldesign_0_cycle1_af2pred,human,A,,-97.13,0.61,3989.98,15,0.62,37,,,,,,,,,,,,,-167.33,-167.33,-2.43,154.79,45.95,40.54,8.0,21.62,139.6,,
+stage1_len60_g1r0_2_p6_dldesign_0_cycle1_af2pred,human,A,,-106.31,0.66,3861.6,11,0.58,33,,,,,,,,,,,,,-160.79,-160.79,-2.75,134.36,60.61,33.33,5.0,15.15,152.5,,
+stage1_len60_g1r0_3_p0_dldesign_0_cycle1_af2pred,human,A,,-124.78,0.67,3868.64,14,0.59,37,,,,,,,,,,,,,-171.81,-171.81,-3.23,141.4,56.76,37.84,10.0,27.03,145.0,,
+stage1_len60_g1r0_3_p3_dldesign_0_cycle1_af2pred,human,A,,-118.25,0.61,4014.7,18,0.58,33,,,,,,,,,,,,,-171.17,-171.17,-2.95,155.43,54.55,54.55,5.0,15.15,150.0,,
+stage1_len60_g1r0_3_p5_dldesign_0_cycle1_af2pred,human,A,,-101.28,0.6,3732.78,12,0.6,33,,,,,,,,,,,,,-157.66,-157.66,-2.71,134.77,51.52,36.36,4.0,12.12,152.1,,
+stage1_len60_g1r0_4_p1_dldesign_0_cycle1_af2pred,human,A,,-106.1,0.56,4032.46,8,0.56,39,,,,,,,,,,,,,-168.88,-168.88,-2.63,158.56,64.1,20.51,5.0,12.82,151.3,,
+stage1_len60_g1r0_4_p3_dldesign_0_cycle1_af2pred,human,A,,-102.7,0.64,3921.62,10,0.61,32,,,,,,,,,,,,,-155.66,-155.66,-2.62,139.48,53.12,31.25,4.0,12.5,153.7,,

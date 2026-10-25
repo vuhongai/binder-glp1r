@@ -1,0 +1,13 @@
+extends: base.yaml
+
+# Round 1 (de novo), 60-mer rerun.  1000 backbones x 8 MPNN passes = 8000
+# designs.  The 90-mer run (3056 designs) gave 0 AF2-gate passes: the 90-mers
+# over-elongated (extent 50-73 A) and draped over the whole TM domain (108-132
+# residues contacted) instead of a local interface on the 18 A hotspot patch,
+# so pae_interaction floored at 11.5 (gate 10).  A 60-mer (25-40 A) wraps the
+# patch locally.  Validate with campaign/run_smoke.py --num 16 first, then:
+#   python campaign/run_round1.py campaign/glp1r_round1/round1.yaml --no-smoke
+# Scale with `backbones` here, or `--per-length <n>` on the command line.
+round:
+  backbones: 1000
+  mpnn_passes: 8

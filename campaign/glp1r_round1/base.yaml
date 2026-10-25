@@ -1,0 +1,113 @@
+# GLP1R agonist binder -- shared config (round 1 and round 2 both extend this).
+#
+# Target: human GLP1R (P43220), the modeled active-state receptor from 6X18
+# (auth chain R).  The ECD (design 1-72, UniProt 29-100) is TRIMMED: it sits
+# 34.7 A from the hotspots and competes for the binder, so the diffusion target
+# is the TM domain + C-tail (design 73-384, UniProt 101-423).  The hotspots are
+# the ECL2/ECL3 activation patch, all in the TM domain:
+#   T298 R299 N300 (ECL2)  D372 R380 L384 (ECL3/TM7)
+#   = design 264 265 266  333 341 345
+#
+# Numbering note: `hotspots` are DESIGN numbers, the same as the residue
+# numbers in receptor_tmdomain.pdb (73-384).  The design->UniProt map is
+# data/targets/glp1r/design2up_tmdomain.json.  Round 2 re-derives the hotspots
+# for the champion pose (chain B, renumbered) in campaign/remap_hotspots.py.
+
+target:
+  name: glp1r
+  structure: data/targets/glp1r/receptor_tmdomain.pdb
+  reference_chain: A
+  hotspots: [264, 265, 266, 333, 341, 345]   # T298 R299 N300 D372 R380 L384
+  species: [human]
+  species_fasta:
+    human: data/fasta/GLP1R_HUMAN_P43220.fasta
+  target_copies: 1
+
+binder:
+  length: 60                            # shortened from 90: the 90-mers over-elongated (extent ~69 A) spanning both hotspot clusters with marginal pae (~12); a 60-mer should bind tighter to the reachable ECL2/ECL3 pocket
+
+# Pre-MPNN backbone filter (saves compute).  The 90-mer backbones were
+# consistently elongated (extent ~64-73 A, rg ~20 A) even though they sat on
+# the hotspot region (hot_dist ~4-10 A) -- so the docking mode (hot_dist) is
+# the active gate and the shape limits are kept loose (a hard shape gate would
+# reject the whole batch).  A floor in the filter (max(4, n//10)) guarantees it
+# can never empty the stage.  Rejected backbones go to <stage>/diffusion/
+# rejected/ (kept, not deleted).  For the 60-mer the shape limits are tightened
+# (a compact 60-mer is ~25-40 A extent, rg ~12-16 A) to push backbones toward a
+# tighter binding.
+round:
+  filter_backbones: true
+  # Loosened after the 60-mer smoke (2026-10-19): extent<=50 rejected 60% of
+  # backbones, including 3 that were only 51-53 A (rg<=18, essentially
+  # compact) -- starving the run of sample size. extent<=60/rg<=20 keeps the
+  # near-compact backbones (the good ones, best pae 10.42) while still
+  # rejecting the truly elongated 67-86 A ones.
+  filter_extent_max: 60.0
+  filter_rg_max: 20.0
+  filter_hotspot_dist_max: 12.0
+
+campaign:
+  partial_t: 10
+  max_winners: 6
+  mpnn:
+    temperature: 0.15                   # user-specified (reduce Ala dominance)
+    refine_temperature: 0.15
+    relax_cycles: 1
+    seqs_per_struct: 1
+    refine: false                       # round-1.5 protocol: no argmax refine (the Ala bias)
+
+thresholds:
+  af2:
+    pae_max: 10.0
+    rmsd_max: 2.0
+    plddt_min: 80.0
+  af3:
+    iptm_min: 0.80
+    chain_pae_max: 10.0
+    plddt_min: 80.0
+    rmsd_max: 3.0
+    has_clash_max: 0
+  rosetta:
+    ddG_max: -35.0
+    sc_min: 0.60
+    dSASA_min: 1000.0
+    hbonds_min: 3
+    packstat_min: 0.60
+  seq_qc:
+    length_min: 40
+    length_max: 100
+    charge_pH7_min: -8.0
+    charge_pH7_max: 5.0
+    GRAVY_max: 1.0
+    n_cys_max: 1
+    n_deamid_max: 1
+    n_glyco_max: 1
+    aromatic_frac_max: 0.25
+  seq_diversity_collapsed: 0.98
+
+results_root: outputs/campaign
+resources:
+  conda_base: ~/anaconda3
+  conda:
+    rfdiffusion: SE3nv
+    mpnn: proteinmpnn_binder_design
+    af2: af2_binder_design
+  roots:
+    rfdiffusion: ~/RFdiffusion
+    dlbinder: ~/dl_binder_design
+  af3:
+    python: /DATA/alphafold3/env/bin/python
+    root: /DATA/alphafold3
+    model_dir: /media/DATABRUT/DB_DDC/serverGPU/Cache_GPU_Ai/alphafold3_weights
+    db_dir: /DATA/database_alphafold3
+  rosetta:
+    dalphaball: ~/BindCraft/functions/DAlphaBall.gcc
+    bindcraft_env_lib: ~/anaconda3/envs/BindCraft/lib
+  gpus: [0, 1]
+  mpnn_workers: 64
+  af2_per_gpu: 2
+  diffuse_per_gpu: 1
+  pipeline_blocks: 4
+  rosetta_parallel: 16
+  ntfy_server: https://ntfy.sh
+  ntfy_topic: design_glp1r_binder

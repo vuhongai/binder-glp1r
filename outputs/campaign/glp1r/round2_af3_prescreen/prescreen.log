@@ -1,0 +1,157 @@
+[2026-10-23 08:20:18] ========================================================================
+[2026-10-23 08:20:18] glp1r  pid 3822352  cwd /DATA/binder-glp1r
+[2026-10-23 08:20:18] binder /DATA/binder
+AF3 MSA precompute for human (GPU 1)
+human: target 463 aa -> /DATA/binder-glp1r/outputs/campaign/glp1r/af3_msa_cache/work_human/target_human.json
+
+Running AlphaFold 3. Please note that standard AlphaFold 3 model parameters are
+only available under terms of use provided at
+https://github.com/google-deepmind/alphafold3/blob/main/WEIGHTS_TERMS_OF_USE.md.
+If you do not agree to these terms and are using AlphaFold 3 derived model
+parameters, cancel execution of AlphaFold 3 inference with CTRL-C, and do not
+use the model parameters.
+
+
+Running fold job target_human...
+Output will be written in /DATA/binder-glp1r/outputs/campaign/glp1r/af3_msa_cache/work_human/target_human
+Running data pipeline...
+Running data pipeline for chain A...
+I1023 08:20:19.996782 139858450589504 pipeline.py:82] Getting protein MSAs for sequence MAGAPGPLRLALLLLGMVGRAGPRPQGATVSLWETVQKWREYRRQCQRSLTEDPPPATDLFCNRTFDEYACWPDGEPGSFVNVSCPWYLPWASSVPQGHVYRFCTAEGLWLQKDNSSLPWRDLSECEESKRGERSSPEEQLLFLYIIYTVGYALSFSALVIASAILLGFRHLHCTRNYIHLNLFASFILRALSVFIKDAALKWMYSTAAQQHQWDGLLSYQDSLSCRLVFLLMQYCVAANYYWLLVEGVYLYTLLAFSVLSEQWIFRLYVSIGWGVPLLFVVPWGIVKYLYEDEGCWTRNSNMNYWLIIRLPILFAIGVNFLIFVRVICIVVSKLKANLMCKTDIKCRLAKSTLTLIPLLGTHEVIFAFVMDEHARGTLRFIKLFTELSFTSFQGLMVAILYCFVNNEVQLEFRKSWERWRLEHLHIQRDSSMKPLKCPTSSLSSGATAGSSMYTATCQASCS
+I1023 08:20:20.002383 139852585322048 jackhmmer.py:177] Query sequence (non-sharded db): MAGAPGPLRLALLLLG... (len 463)
+I1023 08:20:20.002674 139852593714752 jackhmmer.py:177] Query sequence (non-sharded db): MAGAPGPLRLALLLLG... (len 463)
+I1023 08:20:20.002842 139852576929344 jackhmmer.py:177] Query sequence (non-sharded db): MAGAPGPLRLALLLLG... (len 463)
+I1023 08:20:20.002992 139852568520256 jackhmmer.py:177] Query sequence (non-sharded db): MAGAPGPLRLALLLLG... (len 463)
+I1023 08:20:20.005802 139852576929344 subprocess_utils.py:82] Launching subprocess "/DATA/alphafold3/env/bin/jackhmmer -o /dev/null -A /tmp/tmprmk39vh6/output.sto --noali --F1 0.0005 --F2 5e-05 --F3 5e-07 --cpu 8 -N 1 -E 0.0001 --incE 0.0001 --seq_limit 5000 /tmp/tmprmk39vh6/query.fasta /DATA/database_alphafold3/bfd-first_non_consensus_sequences.fasta"
+I1023 08:20:20.006036 139852585322048 subprocess_utils.py:82] Launching subprocess "/DATA/alphafold3/env/bin/jackhmmer -o /dev/null -A /tmp/tmp06breb2v/output.sto --noali --F1 0.0005 --F2 5e-05 --F3 5e-07 --cpu 8 -N 1 -E 0.0001 --incE 0.0001 --seq_limit 5000 /tmp/tmp06breb2v/query.fasta /DATA/database_alphafold3/mgy_clusters_2022_05.fa"
+I1023 08:20:20.006265 139852593714752 subprocess_utils.py:82] Launching subprocess "/DATA/alphafold3/env/bin/jackhmmer -o /dev/null -A /tmp/tmp67jtec0i/output.sto --noali --F1 0.0005 --F2 5e-05 --F3 5e-07 --cpu 8 -N 1 -E 0.0001 --incE 0.0001 --seq_limit 10000 /tmp/tmp67jtec0i/query.fasta /DATA/database_alphafold3/uniref90_2022_05.fa"
+I1023 08:20:20.007915 139852568520256 subprocess_utils.py:82] Launching subprocess "/DATA/alphafold3/env/bin/jackhmmer -o /dev/null -A /tmp/tmp1b867lq8/output.sto --noali --F1 0.0005 --F2 5e-05 --F3 5e-07 --cpu 8 -N 1 -E 0.0001 --incE 0.0001 --seq_limit 50000 /tmp/tmp1b867lq8/query.fasta /DATA/database_alphafold3/uniprot_all_2021_04.fa"
+I1023 08:21:27.818932 139852576929344 subprocess_utils.py:111] Finished Jackhmmer (bfd-first_non_consensus_sequences.fasta) in 67.812 seconds
+I1023 08:25:16.812726 139852593714752 subprocess_utils.py:111] Finished Jackhmmer (uniref90_2022_05.fa) in 296.805 seconds
+I1023 08:27:41.169013 139852568520256 subprocess_utils.py:111] Finished Jackhmmer (uniprot_all_2021_04.fa) in 441.160 seconds
+I1023 08:28:17.330128 139852585322048 subprocess_utils.py:111] Finished Jackhmmer (mgy_clusters_2022_05.fa) in 477.323 seconds
+I1023 08:28:17.337392 139858450589504 pipeline.py:115] Getting protein MSAs took 477.34 seconds for sequence MAGAPGPLRLALLLLGMVGRAGPRPQGATVSLWETVQKWREYRRQCQRSLTEDPPPATDLFCNRTFDEYACWPDGEPGSFVNVSCPWYLPWASSVPQGHVYRFCTAEGLWLQKDNSSLPWRDLSECEESKRGERSSPEEQLLFLYIIYTVGYALSFSALVIASAILLGFRHLHCTRNYIHLNLFASFILRALSVFIKDAALKWMYSTAAQQHQWDGLLSYQDSLSCRLVFLLMQYCVAANYYWLLVEGVYLYTLLAFSVLSEQWIFRLYVSIGWGVPLLFVVPWGIVKYLYEDEGCWTRNSNMNYWLIIRLPILFAIGVNFLIFVRVICIVVSKLKANLMCKTDIKCRLAKSTLTLIPLLGTHEVIFAFVMDEHARGTLRFIKLFTELSFTSFQGLMVAILYCFVNNEVQLEFRKSWERWRLEHLHIQRDSSMKPLKCPTSSLSSGATAGSSMYTATCQASCS
+I1023 08:28:17.337569 139858450589504 pipeline.py:121] Deduplicating MSAs for sequence MAGAPGPLRLALLLLGMVGRAGPRPQGATVSLWETVQKWREYRRQCQRSLTEDPPPATDLFCNRTFDEYACWPDGEPGSFVNVSCPWYLPWASSVPQGHVYRFCTAEGLWLQKDNSSLPWRDLSECEESKRGERSSPEEQLLFLYIIYTVGYALSFSALVIASAILLGFRHLHCTRNYIHLNLFASFILRALSVFIKDAALKWMYSTAAQQHQWDGLLSYQDSLSCRLVFLLMQYCVAANYYWLLVEGVYLYTLLAFSVLSEQWIFRLYVSIGWGVPLLFVVPWGIVKYLYEDEGCWTRNSNMNYWLIIRLPILFAIGVNFLIFVRVICIVVSKLKANLMCKTDIKCRLAKSTLTLIPLLGTHEVIFAFVMDEHARGTLRFIKLFTELSFTSFQGLMVAILYCFVNNEVQLEFRKSWERWRLEHLHIQRDSSMKPLKCPTSSLSSGATAGSSMYTATCQASCS
+I1023 08:28:17.389322 139858450589504 pipeline.py:134] Deduplicating MSAs took 0.05 seconds for sequence MAGAPGPLRLALLLLGMVGRAGPRPQGATVSLWETVQKWREYRRQCQRSLTEDPPPATDLFCNRTFDEYACWPDGEPGSFVNVSCPWYLPWASSVPQGHVYRFCTAEGLWLQKDNSSLPWRDLSECEESKRGERSSPEEQLLFLYIIYTVGYALSFSALVIASAILLGFRHLHCTRNYIHLNLFASFILRALSVFIKDAALKWMYSTAAQQHQWDGLLSYQDSLSCRLVFLLMQYCVAANYYWLLVEGVYLYTLLAFSVLSEQWIFRLYVSIGWGVPLLFVVPWGIVKYLYEDEGCWTRNSNMNYWLIIRLPILFAIGVNFLIFVRVICIVVSKLKANLMCKTDIKCRLAKSTLTLIPLLGTHEVIFAFVMDEHARGTLRFIKLFTELSFTSFQGLMVAILYCFVNNEVQLEFRKSWERWRLEHLHIQRDSSMKPLKCPTSSLSSGATAGSSMYTATCQASCS, found 10015 unpaired sequences, 21210 paired sequences
+I1023 08:28:17.405643 139858450589504 pipeline.py:40] Getting protein templates for sequence MAGAPGPLRLALLLLGMVGRAGPRPQGATVSLWETVQKWREYRRQCQRSLTEDPPPATDLFCNRTFDEYACWPDGEPGSFVNVSCPWYLPWASSVPQGHVYRFCTAEGLWLQKDNSSLPWRDLSECEESKRGERSSPEEQLLFLYIIYTVGYALSFSALVIASAILLGFRHLHCTRNYIHLNLFASFILRALSVFIKDAALKWMYSTAAQQHQWDGLLSYQDSLSCRLVFLLMQYCVAANYYWLLVEGVYLYTLLAFSVLSEQWIFRLYVSIGWGVPLLFVVPWGIVKYLYEDEGCWTRNSNMNYWLIIRLPILFAIGVNFLIFVRVICIVVSKLKANLMCKTDIKCRLAKSTLTLIPLLGTHEVIFAFVMDEHARGTLRFIKLFTELSFTSFQGLMVAILYCFVNNEVQLEFRKSWERWRLEHLHIQRDSSMKPLKCPTSSLSSGATAGSSMYTATCQASCS
+I1023 08:28:17.905057 139858450589504 subprocess_utils.py:82] Launching subprocess "/DATA/alphafold3/env/bin/hmmbuild --informat stockholm --hand --amino /tmp/tmp8c833iy2/output.hmm /tmp/tmp8c833iy2/query.msa"
+I1023 08:28:18.729329 139858450589504 subprocess_utils.py:111] Finished Hmmbuild in 0.824 seconds
+I1023 08:28:18.741830 139858450589504 subprocess_utils.py:82] Launching subprocess "/DATA/alphafold3/env/bin/hmmsearch --noali --cpu 8 --F1 0.1 --F2 0.1 --F3 0.1 -E 100 --incE 100 --domE 100 --incdomE 100 -A /tmp/tmprivwjba_/output.sto /tmp/tmprivwjba_/query.hmm /DATA/database_alphafold3/pdb_seqres_2022_09_28.fasta"
+I1023 08:28:25.998242 139858450589504 subprocess_utils.py:111] Finished Hmmsearch (pdb_seqres_2022_09_28.fasta) in 7.256 seconds
+I1023 08:28:26.526040 139858450589504 pipeline.py:52] Getting 4 protein templates took 9.12 seconds for sequence MAGAPGPLRLALLLLGMVGRAGPRPQGATVSLWETVQKWREYRRQCQRSLTEDPPPATDLFCNRTFDEYACWPDGEPGSFVNVSCPWYLPWASSVPQGHVYRFCTAEGLWLQKDNSSLPWRDLSECEESKRGERSSPEEQLLFLYIIYTVGYALSFSALVIASAILLGFRHLHCTRNYIHLNLFASFILRALSVFIKDAALKWMYSTAAQQHQWDGLLSYQDSLSCRLVFLLMQYCVAANYYWLLVEGVYLYTLLAFSVLSEQWIFRLYVSIGWGVPLLFVVPWGIVKYLYEDEGCWTRNSNMNYWLIIRLPILFAIGVNFLIFVRVICIVVSKLKANLMCKTDIKCRLAKSTLTLIPLLGTHEVIFAFVMDEHARGTLRFIKLFTELSFTSFQGLMVAILYCFVNNEVQLEFRKSWERWRLEHLHIQRDSSMKPLKCPTSSLSSGATAGSSMYTATCQASCS
+Running data pipeline for chain A took 486.64 seconds
+Writing model input JSON to /DATA/binder-glp1r/outputs/campaign/glp1r/af3_msa_cache/work_human/target_human/target_human_data.json
+Skipping model inference...
+Fold job target_human done, output written to /DATA/binder-glp1r/outputs/campaign/glp1r/af3_msa_cache/work_human/target_human
+
+Done running 1 fold jobs.
+human: MSA cached to /DATA/binder-glp1r/outputs/campaign/glp1r/af3_msa_cache/human_target_data.json (488s)
+human: target 463 aa (MAGAPGPLRLALLLL...QASCS)
+  human MSA cache: 20030 unpaired lines, 4 templates
+
+42 binders x 1 species = 42 AF3 jobs
+wrote 42 JSONs under /DATA/binder-glp1r/outputs/campaign/glp1r/round2_af3_prescreen/{human}}/inputs/
+human / GPU 1: 42 candidates queued
+GPU 1 free: 24161 MiB -- going
+>>> [08:28:29] stage1_len60_g0r0_129_p4_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 435s (1 done, 0 skipped, 0 failed)
+>>> [08:35:45] stage1_len60_g0r0_133_p6_dldesign_0_cycle1_1_af2pred (human, GPU 1)
+    ok in 437s (2 done, 0 skipped, 0 failed)
+>>> [08:43:02] stage1_len60_g0r0_142_p6_dldesign_0_cycle1_1_af2pred (human, GPU 1)
+    ok in 436s (3 done, 0 skipped, 0 failed)
+>>> [08:50:19] stage1_len60_g0r0_172_p0_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 436s (4 done, 0 skipped, 0 failed)
+>>> [08:57:35] stage1_len60_g0r0_191_p6_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 436s (5 done, 0 skipped, 0 failed)
+>>> [09:04:51] stage1_len60_g0r0_199_p5_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 435s (6 done, 0 skipped, 0 failed)
+>>> [09:12:07] stage1_len60_g0r0_230_p3_dldesign_0_cycle1_1_af2pred (human, GPU 1)
+    ok in 436s (7 done, 0 skipped, 0 failed)
+>>> [09:19:24] stage1_len60_g0r0_241_p1_dldesign_0_cycle1_1_af2pred (human, GPU 1)
+    ok in 436s (8 done, 0 skipped, 0 failed)
+>>> [09:26:40] stage1_len60_g0r0_27_p3_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 436s (9 done, 0 skipped, 0 failed)
+>>> [09:33:57] stage1_len60_g0r0_280_p4_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 436s (10 done, 0 skipped, 0 failed)
+>>> [09:41:13] stage1_len60_g0r0_299_p7_dldesign_0_cycle1_1_af2pred (human, GPU 1)
+    ok in 435s (11 done, 0 skipped, 0 failed)
+>>> [09:48:29] stage1_len60_g0r0_323_p3_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 436s (12 done, 0 skipped, 0 failed)
+>>> [09:55:45] stage1_len60_g0r0_343_p0_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 434s (13 done, 0 skipped, 0 failed)
+>>> [10:02:59] stage1_len60_g0r0_348_p0_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 434s (14 done, 0 skipped, 0 failed)
+>>> [10:10:13] stage1_len60_g0r0_352_p2_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 436s (15 done, 0 skipped, 0 failed)
+>>> [10:17:30] stage1_len60_g0r0_356_p2_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 436s (16 done, 0 skipped, 0 failed)
+>>> [10:24:46] stage1_len60_g0r0_365_p3_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 436s (17 done, 0 skipped, 0 failed)
+>>> [10:32:03] stage1_len60_g0r0_430_p6_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 437s (18 done, 0 skipped, 0 failed)
+>>> [10:39:20] stage1_len60_g0r0_432_p6_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 435s (19 done, 0 skipped, 0 failed)
+>>> [10:46:35] stage1_len60_g0r0_448_p3_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 434s (20 done, 0 skipped, 0 failed)
+>>> [10:53:50] stage1_len60_g0r0_451_p7_dldesign_0_cycle1_1_af2pred (human, GPU 1)
+    ok in 437s (21 done, 0 skipped, 0 failed)
+>>> [11:01:07] stage1_len60_g0r0_454_p2_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 434s (22 done, 0 skipped, 0 failed)
+>>> [11:08:21] stage1_len60_g0r0_473_p3_dldesign_0_cycle1_1_af2pred (human, GPU 1)
+    ok in 437s (23 done, 0 skipped, 0 failed)
+>>> [11:15:38] stage1_len60_g0r0_495_p1_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 434s (24 done, 0 skipped, 0 failed)
+>>> [11:22:53] stage1_len60_g1r0_120_p7_dldesign_0_cycle1_1_af2pred (human, GPU 1)
+    ok in 435s (25 done, 0 skipped, 0 failed)
+>>> [11:30:09] stage1_len60_g1r0_220_p7_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 435s (26 done, 0 skipped, 0 failed)
+>>> [11:37:24] stage1_len60_g1r0_248_p6_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 436s (27 done, 0 skipped, 0 failed)
+>>> [11:44:41] stage1_len60_g1r0_251_p3_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 437s (28 done, 0 skipped, 0 failed)
+>>> [11:51:58] stage1_len60_g1r0_255_p5_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 436s (29 done, 0 skipped, 0 failed)
+>>> [11:59:14] stage1_len60_g1r0_258_p2_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 435s (30 done, 0 skipped, 0 failed)
+>>> [12:06:30] stage1_len60_g1r0_269_p3_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 436s (31 done, 0 skipped, 0 failed)
+>>> [12:13:47] stage1_len60_g1r0_298_p5_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 436s (32 done, 0 skipped, 0 failed)
+>>> [12:21:04] stage1_len60_g1r0_349_p5_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 437s (33 done, 0 skipped, 0 failed)
+>>> [12:28:21] stage1_len60_g1r0_366_p3_dldesign_0_cycle1_1_af2pred (human, GPU 1)
+    ok in 433s (34 done, 0 skipped, 0 failed)
+>>> [12:35:34] stage1_len60_g1r0_394_p2_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 436s (35 done, 0 skipped, 0 failed)
+>>> [12:42:51] stage1_len60_g1r0_399_p1_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 435s (36 done, 0 skipped, 0 failed)
+>>> [12:50:07] stage1_len60_g1r0_421_p4_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 436s (37 done, 0 skipped, 0 failed)
+>>> [12:57:23] stage1_len60_g1r0_422_p1_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 437s (38 done, 0 skipped, 0 failed)
+>>> [13:04:40] stage1_len60_g1r0_427_p4_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 436s (39 done, 0 skipped, 0 failed)
+>>> [13:11:57] stage1_len60_g1r0_464_p4_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 430s (40 done, 0 skipped, 0 failed)
+>>> [13:19:08] stage1_len60_g1r0_46_p2_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 437s (41 done, 0 skipped, 0 failed)
+>>> [13:26:25] stage1_len60_g1r0_82_p6_dldesign_0_cycle1_af2pred (human, GPU 1)
+    ok in 435s (42 done, 0 skipped, 0 failed)
+
+=== human / GPU 1 finished: 42 new, 0 reused, 0 failed in 18311s ===
+human: 42/42 runs summarized
+wrote /DATA/binder-glp1r/outputs/campaign/glp1r/round2_af3_prescreen/af3_summary.csv (42 rows)
+
+Thresholds: iptm >= 0.8, chain_pae_min_TB <= 10.0, plddt_binder_mean >= 80.0
+  human: 0/42 pass
+  pass in every species (['human']): 0
+wrote /DATA/binder-glp1r/outputs/campaign/glp1r/round2_af3_prescreen/af3_pass.txt
+
+champion           iptm  pae_TB  plddt_b  pass
+Traceback (most recent call last):
+  File "/DATA/binder-glp1r/campaign/af3_prescreen.py", line 138, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/DATA/binder-glp1r/campaign/af3_prescreen.py", line 126, in main
+    print(f"{r['design']:16s} {r.get('iptm','?'):>6s} "
+                              ^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Unknown format code 's' for object of type 'float'

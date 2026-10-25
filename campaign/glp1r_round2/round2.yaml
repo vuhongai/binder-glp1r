@@ -1,0 +1,10 @@
+extends: ../glp1r_round1/base.yaml
+
+# Round 2 (basin refinement around round-1 champions).
+# 16 partial-diffusion backbones per champion x 8 MPNN passes. (change to 8 now to speed up)
+# The hotspots are re-derived for the champion pose (chain B, renumbered) by
+# campaign/remap_hotspots.py inside run_round2.py -- do NOT set hotspots_contig
+# by hand here; the remapper computes and verifies it.
+round:
+  backbones: 8
+  mpnn_passes: 8

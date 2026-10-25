@@ -1,0 +1,7 @@
+experiment,design,survives,pae_interaction,epitope_verdict,clash_verdict,n_epitope_res,n_contacts,n_hotspots,frac_on_patch,frac_mismatch_worst,worst_species,epitope,clashes_total,clashes_bb,clashes_sc,min_dist,host_min_dist,host_clashes_bb,clashes_omitted
+smoke_len60,stage1_len60_g0r0_1,False,13.445,,,,,,,,,,,,,,,,
+smoke_len60,stage1_len60_g0r0_2,False,11.785,,,,,,,,,,,,,,,,
+smoke_len60,stage1_len60_g0r0_4,False,22.076,,,,,,,,,,,,,,,,
+smoke_len60,stage1_len60_g1r0_0,False,12.668,,,,,,,,,,,,,,,,
+smoke_len60,stage1_len60_g1r0_4,False,10.423,,,,,,,,,,,,,,,,
+smoke_len60,stage1_len60_g1r0_5,False,13.943,,,,,,,,,,,,,,,,

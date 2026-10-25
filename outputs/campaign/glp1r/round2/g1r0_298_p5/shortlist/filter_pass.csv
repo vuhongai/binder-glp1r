@@ -1,0 +1,13 @@
+tag,pae_interaction,binder_aligned_rmsd,plddt_binder,plddt_target,plddt_total,pae_binder,pae_target
+stage1_len60_g0r0_2_p3_dldesign_0_cycle1_af2pred,8.919,0.528,85.802,93.390,92.166,3.246,5.903
+stage1_len60_g0r0_2_p7_dldesign_0_cycle1_af2pred,9.192,0.582,85.682,93.315,92.083,3.361,5.929
+stage1_len60_g0r0_5_p5_dldesign_0_cycle1_af2pred,8.155,0.426,86.511,92.961,91.921,3.084,6.023
+stage1_len60_g1r0_0_p6_dldesign_0_cycle1_af2pred,9.357,0.538,83.883,93.134,91.642,3.542,5.922
+stage1_len60_g1r0_1_p6_dldesign_0_cycle1_af2pred,9.518,0.542,83.830,92.917,91.451,3.367,5.883
+stage1_len60_g1r0_2_p3_dldesign_0_cycle1_af2pred,9.887,0.448,84.758,92.825,91.524,3.045,5.865
+stage1_len60_g1r0_2_p6_dldesign_0_cycle1_af2pred,8.460,0.779,86.025,93.175,92.022,3.161,5.954
+stage1_len60_g1r0_3_p0_dldesign_0_cycle1_af2pred,8.662,0.868,86.603,93.430,92.329,3.134,5.946
+stage1_len60_g1r0_3_p3_dldesign_0_cycle1_af2pred,9.111,0.409,85.206,93.100,91.826,3.349,5.947
+stage1_len60_g1r0_3_p5_dldesign_0_cycle1_af2pred,9.730,0.449,83.483,92.752,91.257,3.558,6.008
+stage1_len60_g1r0_4_p1_dldesign_0_cycle1_af2pred,9.829,0.899,84.234,92.937,91.534,3.270,5.993
+stage1_len60_g1r0_4_p3_dldesign_0_cycle1_af2pred,8.246,0.465,86.215,92.954,91.867,3.229,6.050
