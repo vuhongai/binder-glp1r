@@ -509,7 +509,7 @@ def write_outputs(out, picked, pooled, log, args):
         w = csv.writer(fh)
         w.writerow(["name", "sequence", "molecule_class"])
         for r in picked:
-            w.writerow([r["name"], r["sequence"], "protein"])
+            w.writerow([r["name"], r["sequence"], "single_chain"])
 
     with open(out / "submission_annotated.csv", "w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=ANNOT_COLS, extrasaction="ignore")

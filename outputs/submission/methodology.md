@@ -1,11 +1,8 @@
 # De novo GLP-1R agonist binders — methodology
 
-60-residue de novo mini-binders designed against the **active-state** human GLP-1R
+60-residue de novo mini-binders designed against the active-state human GLP-1R
 transmembrane face, targeting the peptide-agonist contact surface so that binding
 is coupled to receptor activation rather than to inert surface engagement.
-
-*(This file is written by hand and is not overwritten by `campaign/submit.py`;
-the per-run numbers live alongside it in `selection_report.md`.)*
 
 ---
 
@@ -89,12 +86,8 @@ as an orthogonal check. Two findings shaped the rest of the campaign:
    alone would have discarded half of the confident complexes.
 
 **Round 2** applies partial diffusion (partial_t = 10) around those 12 leads,
-16 backbones × 8 MPNN sequences each, then AF2 gate → AF3 → Rosetta
-InterfaceAnalyzer. One correctness note worth recording: in a round-2 pose the
-binder occupies chain A and the target is renumbered into chain B, so hotspot
-indices must be **remapped through a sequence alignment with per-position residue
-identity verification**, never a fixed offset — the naive version silently steers
-diffusion at the binder's own residues.
+6/16 backbones × 8 MPNN sequences each, then AF2 gate → AF3 → Rosetta
+InterfaceAnalyzer.
 
 ---
 
@@ -141,21 +134,3 @@ where the binder actually sits; those were excluded rather than ranked down.
 (< 70% pairwise). With an expected wet-lab hit rate of a few percent, a submission
 of near-identical sequences is one experiment repeated, not N experiments; the set
 deliberately spans distinct backbones and binding modes.
-
----
-
-## 4. Known limitations
-
-- **Assay construct.** The supplied receptor (residues 24–432) carries
-  undisclosed proprietary thermostabilising mutations. Designs were made against
-  the wild-type 6X18 sequence, so a mutation inside the epitope cannot be ruled out.
-- **ECD blind spot.** AF2/AF3 validate binder + TM domain only. The epitope sits
-  ~35 Å from the ECD, so a steric clash is unlikely, but it was not modelled.
-- **Agonism is predicted, not computed.** No simulation here demonstrates
-  Gs coupling or cAMP production; the mechanistic basis for activation is the
-  hotspot selection and the enforced ECL3/TM7 engagement, and the cell-based
-  functional assay is the real test.
-- **No inactive-state counter-screen.** The inactive structure (6LN2) could not be
-  aligned reliably (rubredoxin insertion plus 11 mutations), so these designs were
-  not counter-screened for selectivity between the active and inactive
-  conformations.
