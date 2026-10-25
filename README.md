@@ -136,6 +136,25 @@ using the bundled synthetic champion (90-res binder + target renumbered +90):
     $PY campaign/run_round2.py campaign/glp1r_round2/round2.yaml --check \
         --champions test0=data/test/synthetic_champion.pdb
 
+### Submission (any time, CPU only)
+
+`campaign/submit.py` builds the Proteinbase upload from **whatever has finished** —
+safe to run on a half-done round 2, and safe to re-run (it caches the structural
+audit and never overwrites `methodology.md`).
+
+    $PY campaign/submit.py --n 40          # Track 1; use --n 20 for Tracks 2/3
+
+Writes to `outputs/submission/`: `submission.csv` (name, sequence,
+molecule_class), `submission_annotated.csv` (every metric used),
+`structure_audit.csv` (per-design hotspot contacts + epitope size) and
+`selection_report.md` (what was pooled, filtered and why). Champions still mid-run
+are reported as skipped rather than silently dropped.
+
+Selection is **agonism-directed**: ECL3/TM7 engagement (D372/R380/L384) is a hard
+requirement wherever an AF3 model is reachable, since a binder that does not
+activate scores zero. Run it on the machine holding the AF3 outputs — `af3/` is
+gitignored, and without those models the hotspot terms fall back to neutral.
+
 ## Key parameters (base.yaml)
 
 - binder length **90**; MPNN **temperature 0.15**, `refine: false`
