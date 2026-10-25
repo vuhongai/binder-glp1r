@@ -142,7 +142,7 @@ using the bundled synthetic champion (90-res binder + target renumbered +90):
 safe to run on a half-done round 2, and safe to re-run (it caches the structural
 audit and never overwrites `methodology.md`).
 
-    $PY campaign/submit.py --n 40          # Track 1; use --n 20 for Tracks 2/3
+    $PY campaign/submit.py --n 20 --min-hot-coverage 6 --max-rmsd-conv 4
 
 Writes to `outputs/submission/`: `submission.csv` (name, sequence,
 molecule_class), `submission_annotated.csv` (every metric used),

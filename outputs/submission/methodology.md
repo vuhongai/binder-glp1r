@@ -109,12 +109,16 @@ length within 10–250 aa.
 **Hotspot engagement, measured per design on the AF3 complex** (heavy-atom
 contacts ≤ 4.5 Å, target chain read in UniProt numbering):
 
-- **≥ 1 ECL3/TM7 contact (D372/R380/L384) is mandatory** — the activation-facing
-  requirement from §1 enforced as a filter rather than an aspiration.
-- Full **6/6 hotspot coverage is preferred** over interface size. This is a real
-  discriminator here, not a formality: across the AF3-validated leads, hotspot
-  coverage and ipTM rank *differently*, and the highest-ipTM parents are not the
-  ones with the most complete hotspot engagement.
+- **Full 6/6 hotspot coverage is required** — every submitted design contacts all
+  three ECL2 residues *and* all three ECL3/TM7 residues. This is the §1
+  activation-facing requirement enforced as a filter rather than an aspiration,
+  and it is a real discriminator: only 42 of 167 otherwise-eligible designs
+  achieve it.
+- It is also a genuine trade-off, taken deliberately. Hotspot coverage and ipTM
+  rank *differently* on this target — the highest-ipTM designs are not the ones
+  with the most complete hotspot engagement — so requiring 6/6 costs roughly
+  0.02–0.03 ipTM at the top of the list. Under rules where a non-activating
+  binder scores zero, mechanism was given priority over interface confidence.
 
 **Interface locality.** Epitope size is measured for every design as a direct
 guard against the round-1 failure mode. For these 60-mers the measured epitope is
@@ -127,9 +131,11 @@ interface hydrogen bonds, packstat, and ddG. ddG is used **normalised per 1,000 
 of buried interface**, not raw — on a flat, oversized interface a large raw ddG is
 a symptom of the drape pathology rather than evidence of a better binder.
 
-**Pose convergence.** The binder RMSD between the AF2 and AF3 models, after
-superposing on the target, flags designs whose predicted pose is not consistent
-across the two methods.
+**Pose convergence is a hard requirement.** The binder RMSD between the AF2 and
+AF3 models, after superposing on the target, must be **below 4 Å**. Across the
+eligible pool this metric has median 4.2 Å and reaches 10.4 Å, so a design can
+carry high ipTM and full hotspot coverage while the two methods disagree about
+where the binder actually sits; those were excluded rather than ranked down.
 
 **Diversity.** Picks are capped per parent lead and per sequence-identity cluster
 (< 70% pairwise). With an expected wet-lab hit rate of a few percent, a submission

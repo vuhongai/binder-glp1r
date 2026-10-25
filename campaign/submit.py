@@ -370,6 +370,14 @@ def hard_filters(rows, args, log):
                 and r["ecl3_contacts"] < args.min_ecl3:
             drops[f"ECL3/TM7 contacts < {args.min_ecl3} (unlikely agonist)"] += 1
             continue
+        if args.min_hot_coverage and r.get("ecl2_contacts") is not None:
+            if r["ecl2_contacts"] + r["ecl3_contacts"] < args.min_hot_coverage:
+                drops[f"hotspot coverage < {args.min_hot_coverage}/6"] += 1
+                continue
+        if args.max_rmsd_conv and r.get("rmsd_conv") is not None \
+                and r["rmsd_conv"] > args.max_rmsd_conv:
+            drops[f"AF2/AF3 pose disagreement > {args.max_rmsd_conv} A"] += 1
+            continue
         if r.get("n_epitope") is not None and r["n_epitope"] > args.epitope_max:
             drops[f"epitope > {args.epitope_max} residues (drape pathology)"] += 1
             continue
@@ -526,7 +534,9 @@ def write_outputs(out, picked, pooled, log, args):
         f"P43220 numbering: ECL2 {HOT_ECL2}, ECL3/TM7 {HOT_ECL3}",
         f"- hard: no AF3 clash, iptm >= {args.min_iptm}, ECL3 contacts >= "
         f"{args.min_ecl3} (when a structure is available), epitope <= "
-        f"{args.epitope_max} residues, 10-250 aa, unique sequence",
+        f"{args.epitope_max} residues, 10-250 aa, unique sequence"
+        + (f", hotspot coverage >= {args.min_hot_coverage}/6" if args.min_hot_coverage else "")
+        + (f", AF2/AF3 pose disagreement <= {args.max_rmsd_conv} A" if args.max_rmsd_conv else ""),
         f"- soft flags: epitope > {args.epitope_soft}, dSASA > {args.dsasa_soft} A^2",
         f"- diversity: <= {args.per_parent} per parent lead, pairwise identity "
         f"< {args.max_identity:.0%}",
@@ -562,6 +572,13 @@ def main(argv=None):
     ap.add_argument("--min-ecl3", type=int, default=1,
                     help="minimum ECL3/TM7 hotspot contacts (agonism requirement)")
     ap.add_argument("--no-require-ecl3", dest="require_ecl3", action="store_false")
+    ap.add_argument("--min-hot-coverage", type=int, default=0,
+                    help="require this many of the 6 hotspots in contact "
+                         "(6 = full ECL2 + ECL3/TM7 engagement); 0 disables")
+    ap.add_argument("--max-rmsd-conv", type=float, default=None,
+                    help="reject designs whose binder moves more than this (A) "
+                         "between the AF2 and AF3 models after target "
+                         "superposition; unset disables")
     ap.add_argument("--cutoff", type=float, default=4.5, help="heavy-atom contact cutoff (A)")
     ap.add_argument("--epitope-soft", type=int, default=55,
                     help="flag designs contacting more target residues than this "
