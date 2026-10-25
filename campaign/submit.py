@@ -59,6 +59,83 @@ def fnum(row, key, default=None):
         return default
 
 
+# Kyte-Doolittle hydropathy and side-chain pKa values, for the sequence-level
+# developability columns that go into the methodology table.
+KD = {"A": 1.8, "R": -4.5, "N": -3.5, "D": -3.5, "C": 2.5, "Q": -3.5,
+      "E": -3.5, "G": -0.4, "H": -3.2, "I": 4.5, "L": 3.8, "K": -3.9,
+      "M": 1.9, "F": 2.8, "P": -1.6, "S": -0.8, "T": -0.7, "W": -0.9,
+      "Y": -1.3, "V": 4.2}
+PKA_POS = {"K": 10.8, "R": 12.5, "H": 6.5}
+PKA_NEG = {"D": 3.9, "E": 4.1, "C": 8.5, "Y": 10.1}
+PKA_NTERM, PKA_CTERM = 8.6, 3.6
+
+
+def charge_at(seq, ph):
+    q = 1.0 / (1.0 + 10 ** (ph - PKA_NTERM)) - 1.0 / (1.0 + 10 ** (PKA_CTERM - ph))
+    for aa, pka in PKA_POS.items():
+        q += seq.count(aa) / (1.0 + 10 ** (ph - pka))
+    for aa, pka in PKA_NEG.items():
+        q -= seq.count(aa) / (1.0 + 10 ** (pka - ph))
+    return q
+
+
+def seq_props(seq):
+    """Sequence-level developability readouts for the designed (MPNN) chain."""
+    lo, hi = 0.0, 14.0
+    for _ in range(100):                       # bisection on the titration curve
+        mid = (lo + hi) / 2
+        if charge_at(seq, mid) > 0:
+            lo = mid
+        else:
+            hi = mid
+    n = len(seq) or 1
+    return {
+        "length": n,
+        "net_charge_pH7": round(charge_at(seq, 7.4), 1),
+        "pI": round((lo + hi) / 2, 2),
+        "GRAVY": round(sum(KD.get(a, 0.0) for a in seq) / n, 2),
+        "n_cys": seq.count("C"),
+        "n_glyco_NXST": len(re.findall(r"N[^P][ST]", seq)),
+        "n_NG": seq.count("NG"),
+        "aromatic_frac": round(sum(seq.count(a) for a in "FWY") / n, 3),
+    }
+
+
+def load_rosetta(root, champ):
+    """design -> Rosetta InterfaceAnalyzer row for one champion.
+
+    lead_ranking.csv carries only a subset of the Rosetta output; packstat and
+    the interface composition terms live in the raw score table.
+    """
+    path = root / CAMPAIGN / "round2" / champ / "rosetta" / "af3_scores.csv"
+    out = {}
+    if not path.exists():
+        return out
+    with open(path, newline="") as fh:
+        for r in csv.DictReader(fh):
+            if (r.get("species") or "human") == "human":
+                out[r["design"]] = r
+    return out
+
+
+def load_seq_diversity(root, champ):
+    """backbone -> MPNN sequence diversity for one champion's round-2 stage."""
+    path = root / CAMPAIGN / "round2" / champ / "seq_diversity.csv"
+    out = {}
+    if not path.exists():
+        return out
+    with open(path, newline="") as fh:
+        for r in csv.DictReader(fh):
+            out[r["backbone"]] = r
+    return out
+
+
+def backbone_of(design):
+    """stage1_len60_g0r0_2_p0_dldesign_... -> stage1_len60_g0r0_2"""
+    m = re.match(r"(.*?)_p\d+_dldesign", design)
+    return m.group(1) if m else design
+
+
 def short_name(design):
     """stage1_len60_g1r0_1_p4_dldesign_0_cycle1_af2pred -> g1r0_1_p4"""
     s = re.sub(r"^stage1_len\d+_", "", design)
@@ -90,6 +167,8 @@ def load_round2(root, log):
             continue
 
         n_before = len(rows)
+        diversity = load_seq_diversity(root, champ)
+        rosetta = load_rosetta(root, champ)
         with open(src, newline="") as fh:
             for r in csv.DictReader(fh):
                 seq = (r.get("sequence") or "").strip().upper()
@@ -97,7 +176,12 @@ def load_round2(root, log):
                     continue
                 seen.add(seq)
                 design = r.get("design", "")
+                div = diversity.get(backbone_of(design), {})
+                ros = rosetta.get(design, {})
                 rows.append({
+                    **seq_props(seq),
+                    "mpnn_n_distinct": div.get("n_distinct"),
+                    "mpnn_median_identity": div.get("median_identity"),
                     "design": design,
                     "short_id": r.get("short_id") or short_name(design),
                     "parent": champ,
@@ -105,15 +189,20 @@ def load_round2(root, log):
                     "source": src.name,
                     "iptm": fnum(r, "iptm_human", fnum(r, "chain_iptm_TB_human")),
                     "pae_int_af3": fnum(r, "chain_pae_min_TB_human"),
+                    "pae_binder_af3": fnum(r, "pae_binder_trimer_mean_human"),
                     "pae_int_af2": fnum(r, "pae_interaction_af2"),
                     "rmsd_af2": fnum(r, "binder_aligned_rmsd_af2"),
+                    "plddt_binder_af2": fnum(r, "plddt_binder_af2"),
                     "rmsd_conv": fnum(r, "rmsd_binder_after_target_super_human"),
                     "plddt_binder": fnum(r, "plddt_binder_mean_human"),
                     "ddG": fnum(r, "ddG_human"),
                     "sc": fnum(r, "sc_human"),
                     "dsasa": fnum(r, "dSASA_int_human"),
                     "hbonds": fnum(r, "interface_hbonds_human"),
-                    "packstat": fnum(r, "packstat_human"),
+                    "packstat": fnum(r, "packstat_human",
+                                     fnum(ros, "packstat")),
+                    "nres_int": fnum(ros, "nres_int"),
+                    "interface_hydrophobicity": fnum(ros, "interface_hydrophobicity"),
                     "clash": fnum(r, "has_clash_human", 0.0),
                 })
         log.append(f"round2/{champ}: {len(rows) - n_before} designs from {src.name}")
@@ -491,11 +580,126 @@ def diversify(rows, n, args, log):
 
 ANNOT_COLS = [
     "rank", "name", "short_id", "parent", "score", "flags", "sequence",
-    "iptm", "pae_int_af3", "pae_int_af2", "rmsd_af2", "rmsd_conv",
-    "plddt_binder", "hot_coverage", "ecl2_contacts", "ecl3_contacts",
-    "min_hot_dist", "hot_dists", "n_epitope", "ddG", "ddG_per_1k", "sc",
-    "dsasa", "hbonds", "packstat", "clash", "design", "source", "cif",
+    "iptm", "pae_int_af3", "pae_binder_af3", "pae_int_af2", "rmsd_af2",
+    "rmsd_conv", "plddt_binder", "plddt_binder_af2", "hot_coverage",
+    "ecl2_contacts", "ecl3_contacts", "min_hot_dist", "hot_dists",
+    "n_epitope", "ddG", "ddG_per_1k", "sc", "dsasa", "hbonds", "packstat",
+    "clash", "nres_int", "interface_hydrophobicity", "length", "net_charge_pH7", "pI", "GRAVY", "n_cys",
+    "n_glyco_NXST", "n_NG", "aromatic_frac", "mpnn_n_distinct",
+    "mpnn_median_identity", "design", "source", "cif",
 ]
+
+TABLE_BEGIN = "<!-- BEGIN AUTOGENERATED LEAD TABLE -- rewritten by campaign/submit.py -->"
+TABLE_END = "<!-- END AUTOGENERATED LEAD TABLE -->"
+
+
+def _md_table(header, rows):
+    out = ["| " + " | ".join(header) + " |",
+           "|" + "|".join("---" for _ in header) + "|"]
+    out += ["| " + " | ".join(r) + " |" for r in rows]
+    return out
+
+
+def lead_tables(picked):
+    """Every metric behind the submitted leads, grouped by the method it comes
+    from. Four narrow tables rather than one unreadable 30-column grid."""
+    def f(r, k, fmt="{:.2f}", dash="-"):
+        v = r.get(k)
+        if v in (None, ""):
+            return dash
+        try:
+            return fmt.format(float(v))
+        except (TypeError, ValueError):
+            return str(v)
+
+    L = [f"## 5. The {len(picked)} submitted designs", "",
+         "Ranked by the composite described in §3. Every metric produced by the "
+         "pipeline is listed, grouped by its source.", ""]
+
+    L += ["### 5.1 Interface confidence and pose (AlphaFold2 / AlphaFold3)", "",
+          "AF2 is the initial-guess prediction used as the design gate; AF3 is a "
+          "blind re-prediction (target MSA only, no initial guess).", ""]
+    L += _md_table(
+        ["#", "design", "parent lead", "AF2 pae_int", "AF2 rmsd_b", "AF2 pLDDT_b",
+         "AF3 ipTM", "AF3 PAE_int", "AF3 PAE_b", "AF3 pLDDT_b", "AF2/AF3 rmsd",
+         "clash"],
+        [[str(r["rank"]), r["short_id"], r["parent"],
+          f(r, "pae_int_af2"), f(r, "rmsd_af2"), f(r, "plddt_binder_af2", "{:.1f}"),
+          f(r, "iptm"), f(r, "pae_int_af3"), f(r, "pae_binder_af3", "{:.1f}"),
+          f(r, "plddt_binder", "{:.1f}"), f(r, "rmsd_conv"),
+          f(r, "clash", "{:.0f}")] for r in picked])
+
+    L += ["", "### 5.2 Epitope and hotspot engagement (AF3 complex, 4.5 Å heavy atom)", "",
+          "Hotspots in UniProt P43220 numbering. Every submitted design contacts "
+          "all six. Distances are the closest binder heavy atom to that residue.", ""]
+    L += _md_table(
+        ["#", "design", "parent lead", "ECL2 /3", "ECL3 /3", "total /6",
+         "min dist Å", "epitope res", "T298", "R299", "N300", "D372", "R380",
+         "L384"],
+        [[str(r["rank"]), r["short_id"], r["parent"],
+          f(r, "ecl2_contacts", "{:.0f}"), f(r, "ecl3_contacts", "{:.0f}"),
+          f(r, "hot_coverage", "{:.0f}"), f(r, "min_hot_dist"),
+          f(r, "n_epitope", "{:.0f}")]
+         + [dict(p.split(":") for p in (r.get("hot_dists") or "").split(";") if ":" in p)
+            .get(h, "-") for h in ("298", "299", "300", "372", "380", "384")]
+         for r in picked])
+
+    L += ["", "### 5.3 Interface energetics (Rosetta InterfaceAnalyzer)", "",
+          "Computed on the AF3 complex. ddG is also given per 1,000 Å² of buried "
+          "surface, since a large raw ddG on an oversized interface reflects area "
+          "rather than quality.", ""]
+    L += _md_table(
+        ["#", "design", "parent lead", "ddG", "ddG / 1k Å²", "dSASA_int Å²",
+         "shape compl.", "packstat", "H-bonds", "interface res",
+         "hydrophobic %"],
+        [[str(r["rank"]), r["short_id"], r["parent"], f(r, "ddG", "{:.1f}"),
+          f(r, "ddG_per_1k", "{:.1f}"), f(r, "dsasa", "{:.0f}"), f(r, "sc"),
+          f(r, "packstat"), f(r, "hbonds", "{:.0f}"),
+          f(r, "nres_int", "{:.0f}"),
+          f(r, "interface_hydrophobicity", "{:.1f}")] for r in picked])
+
+    L += ["", "### 5.4 Designed sequence (ProteinMPNN) and developability", "",
+          "MPNN diversity is measured across the 8 sequences sampled for that "
+          "design's backbone. No design carries a cysteine.", ""]
+    L += _md_table(
+        ["#", "design", "parent lead", "len", "net charge pH 7.4", "pI",
+         "GRAVY", "aromatic", "Cys", "N-glyc sequons", "NG",
+         "MPNN distinct /8", "MPNN median id"],
+        [[str(r["rank"]), r["short_id"], r["parent"], f(r, "length", "{:.0f}"),
+          f(r, "net_charge_pH7", "{:+.1f}"), f(r, "pI"), f(r, "GRAVY"),
+          f(r, "aromatic_frac", "{:.1%}"), f(r, "n_cys", "{:.0f}"),
+          f(r, "n_glyco_NXST", "{:.0f}"), f(r, "n_NG", "{:.0f}"),
+          f(r, "mpnn_n_distinct", "{:.0f}"), f(r, "mpnn_median_identity")]
+         for r in picked])
+
+    L += ["", "### 5.5 Sequences", "",
+          "| # | name | sequence |", "|---|------|----------|"]
+    L += [f"| {r['rank']} | {r['name']} | `{r['sequence']}` |" for r in picked]
+    return L
+
+
+def update_methodology(out, picked, log):
+    """Rewrite the autogenerated table block in methodology.md, in place.
+
+    The prose above the markers is hand-written and never touched; only the
+    block between them is replaced, so the table cannot drift out of step with
+    submission.csv.
+    """
+    path = out / "methodology.md"
+    block = "\n".join([TABLE_BEGIN, ""] + lead_tables(picked) + ["", TABLE_END])
+    if path.exists():
+        text = path.read_text()
+        if TABLE_BEGIN in text and TABLE_END in text:
+            head, _, rest = text.partition(TABLE_BEGIN)
+            _, _, tail = rest.partition(TABLE_END)
+            path.write_text(head + block + tail)
+            log.append("methodology.md: lead table refreshed in place")
+        else:
+            path.write_text(text.rstrip() + "\n\n---\n\n" + block + "\n")
+            log.append("methodology.md: lead table appended (no markers found)")
+    else:
+        path.write_text("# GLP1R submission\n\n" + block + "\n")
+        log.append("methodology.md: created with the lead table only")
 
 
 def write_outputs(out, picked, pooled, log, args):
@@ -509,12 +713,17 @@ def write_outputs(out, picked, pooled, log, args):
         w = csv.writer(fh)
         w.writerow(["name", "sequence", "molecule_class"])
         for r in picked:
-            w.writerow([r["name"], r["sequence"], "single_chain"])
+            # The CSV accepts only protein / nanobody / scfv / fab_kappa /
+            # fab_lambda. "Single chain protein" names the design format in the
+            # rules, not a column value: a de novo mini-binder is "protein".
+            w.writerow([r["name"], r["sequence"], "protein"])
 
     with open(out / "submission_annotated.csv", "w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=ANNOT_COLS, extrasaction="ignore")
         w.writeheader()
         w.writerows(picked)
+
+    update_methodology(out, picked, log)
 
     lines = [
         "# GLP1R submission -- selection report",
