@@ -1,0 +1,6 @@
+design,species,af3_target_chain,neighbour_chains,ddG,sc,dSASA_int,interface_hbonds,packstat,nres_int,ddG_all,sc_all,dSASA_all,hbonds_all,nres_int_all,nbr_min_dist_pre,nbr_clashes_pre,nbr_clashes_bb_pre,nbr_min_dist_post,nbr_clashes_post,nbr_clashes_bb_post,nbr_contacts_post,total_score,binder_score,interface_dG_SASA_ratio,interface_binder_fraction,interface_hydrophobicity,interface_hbond_percentage,interface_delta_unsat_hbonds,interface_delta_unsat_hbonds_percentage,time,error,assembly_error
+stage1_len60_g0r0_1_p6_dldesign_0_cycle1_af2pred,human,A,,-91.15,0.66,2943.33,15,0.6,28,,,,,,,,,,,,,-175.5,-175.5,-3.1,87.19,53.57,53.57,5.0,17.86,137.5,,
+stage1_len60_g0r0_2_p1_dldesign_0_cycle1_af2pred,human,A,,-135.32,0.62,5288.57,20,0.58,43,,,,,,,,,,,,,-130.21,-130.21,-2.56,159.84,55.81,46.51,7.0,16.28,151.7,,
+stage1_len60_g1r0_0_p0_dldesign_0_cycle1_af2pred,human,A,,-98.3,0.65,3679.48,14,0.52,39,,,,,,,,,,,,,-165.97,-165.97,-2.67,123.81,56.41,35.9,2.0,5.13,140.0,,
+stage1_len60_g1r0_0_p5_dldesign_0_cycle1_af2pred,human,A,,-108.98,0.68,4082.71,16,0.59,36,,,,,,,,,,,,,-173.74,-173.74,-2.67,141.58,52.78,44.44,3.0,8.33,144.3,,
+stage1_len60_g1r0_1_p4_dldesign_0_cycle1_af2pred,human,A,,-86.34,0.55,3805.03,12,0.54,37,,,,,,,,,,,,,-164.4,-164.4,-2.27,128.87,37.84,32.43,1.0,2.7,142.2,,

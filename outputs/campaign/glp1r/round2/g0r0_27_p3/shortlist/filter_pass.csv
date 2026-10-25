@@ -1,0 +1,8 @@
+tag,pae_interaction,binder_aligned_rmsd,plddt_binder,plddt_target,plddt_total,pae_binder,pae_target
+stage1_len60_g0r0_0_p4_dldesign_0_cycle1_af2pred,9.796,0.600,83.569,92.913,91.406,3.446,6.001
+stage1_len60_g0r0_0_p5_dldesign_0_cycle1_af2pred,9.977,0.639,82.466,92.825,91.154,3.637,5.980
+stage1_len60_g0r0_0_p7_dldesign_0_cycle1_af2pred,9.848,0.751,82.641,92.721,91.095,3.755,6.180
+stage1_len60_g0r0_2_p7_dldesign_0_cycle1_af2pred,8.666,0.643,86.533,93.357,92.256,2.977,5.884
+stage1_len60_g1r0_0_p6_dldesign_0_cycle1_af2pred,9.862,0.556,83.005,92.813,91.231,3.328,6.005
+stage1_len60_g1r0_1_p1_dldesign_0_cycle1_af2pred,9.786,0.671,84.114,92.591,91.223,3.199,6.187
+stage1_len60_g1r0_2_p3_dldesign_0_cycle1_af2pred,9.367,0.449,84.965,93.157,91.836,3.172,5.909

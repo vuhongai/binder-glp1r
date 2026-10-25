@@ -21,4 +21,4 @@ af3_msa_cache/
 af3/
 !af3/*/af3_rmsd_check.csv
 !af3/*/af3_summary.csv
-rosetta/parts/
+parts/

@@ -1,0 +1,7 @@
+backbone,n_seqs,n_distinct,median_identity
+stage1_len60_g0r0_0,8,8,0.5333
+stage1_len60_g0r0_1,8,8,0.5667
+stage1_len60_g0r0_2,8,8,0.5583
+stage1_len60_g1r0_0,8,8,0.4750
+stage1_len60_g1r0_1,8,8,0.5000
+stage1_len60_g1r0_2,8,8,0.4917
